@@ -83,7 +83,6 @@ plt.title("Decision Tree Visualization")
 plt.savefig("visualizations/decision_tree.png")
 
 # --- Visualization 4: Decision boundary (KNN on 2 features) ---
-# Use only height & width for visualization
 X2 = X_scaled[['height', 'width']]
 X2_train, X2_test, y2_train, y2_test = train_test_split(
     X2, y, test_size=0.2, random_state=42
@@ -109,5 +108,21 @@ plt.title("Decision Boundary (KNN)")
 plt.xlabel("height")
 plt.ylabel("width")
 plt.savefig("visualizations/decision_boundary_knn.png")
+
+# --- Visualization 5: Decision boundary (Logistic Regression on 2 features) ---
+log_model = LogisticRegression(max_iter=200)
+log_model.fit(X2_train, y2_train)
+
+Z_log = log_model.predict(np.c_[xx.ravel(), yy.ravel()])
+Z_log = Z_log.reshape(xx.shape)
+
+plt.figure()
+plt.contourf(xx, yy, Z_log, cmap=cmap_light, alpha=0.8)
+plt.scatter(X2.iloc[:, 0], X2.iloc[:, 1], c=y, edgecolor="k",
+            cmap=ListedColormap(["red", "green", "blue"]))
+plt.title("Decision Boundary (Logistic Regression)")
+plt.xlabel("height")
+plt.ylabel("width")
+plt.savefig("visualizations/decision_boundary_logreg.png")
 
 print("✅ All plots saved in 'visualizations/' folder")
